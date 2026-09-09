@@ -42,19 +42,7 @@ export async function updateSession(request: NextRequest) {
   const isApiRoute = request.nextUrl.pathname.startsWith('/api');
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
 
-  // Demo mode cookie check
-  const isDemo = request.cookies.get('leadflow_demo')?.value === 'true';
-
   if (isApiRoute || isAuthCallback) {
-    return response;
-  }
-
-  if (isDemo) {
-    if (isAuthPage || isRootPage) {
-      const url = request.nextUrl.clone();
-      url.pathname = '/dashboard';
-      return NextResponse.redirect(url);
-    }
     return response;
   }
 

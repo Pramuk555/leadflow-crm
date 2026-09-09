@@ -1,37 +1,28 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { STATUS_CONFIG, PLATFORM_CONFIG } from '@/lib/constants';
-import { cookies } from 'next/headers';
-import { MOCK_PROSPECTS } from '@/lib/mock-data';
 import { formatCurrency } from '@/lib/utils';
 import { BarChart3, Trophy, DollarSign, TrendingUp, Users, Target } from 'lucide-react';
 
 export default async function StatsPage() {
-  const cookieStore = await cookies();
-  const isDemo = cookieStore.get('leadflow_demo')?.value === 'true';
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect('/login');
 
-  let allProspects = MOCK_PROSPECTS;
+  const { data: member } = await supabase
+    .from('team_members')
+    .select('org_id')
+    .eq('user_id', user.id)
+    .single();
 
-  if (!isDemo) {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) redirect('/login');
+  let allProspects: any[] = [];
 
-    const { data: member } = await supabase
-      .from('team_members')
-      .select('org_id')
-      .eq('user_id', user.id)
-      .single();
-
-    if (member) {
-      const { data: prospects } = await supabase
-        .from('prospects')
-        .select('*')
-        .eq('org_id', member.org_id);
-      if (prospects && prospects.length > 0) {
-        allProspects = prospects;
-      }
-    }
+  if (member) {
+    const { data: prospects } = await supabase
+      .from('prospects')
+      .select('*')
+      .eq('org_id', member.org_id);
+    allProspects = prospects || [];
   }
 
   const totalLeads = allProspects.length;
@@ -75,7 +66,7 @@ export default async function StatsPage() {
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 animate-fade-in space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-100">Agency Analytics & Performance</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Agency Analytics &amp; Performance</h1>
         <p className="text-sm text-slate-400">High-level pipeline metrics, conversion funnel, and lead sources.</p>
       </div>
 
