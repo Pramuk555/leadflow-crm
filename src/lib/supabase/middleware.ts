@@ -38,6 +38,7 @@ export async function updateSession(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const isAuthPage = request.nextUrl.pathname === '/login';
+  const isAuthFlow = request.nextUrl.pathname.startsWith('/auth/');
   const isRootPage = request.nextUrl.pathname === '/';
   const isApiRoute = request.nextUrl.pathname.startsWith('/api');
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
@@ -46,7 +47,7 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
-  if (!user && !isAuthPage) {
+  if (!user && !isAuthPage && !isAuthFlow) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
