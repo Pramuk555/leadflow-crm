@@ -31,6 +31,8 @@ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
+ALTER TYPE team_role ADD VALUE IF NOT EXISTS 'affiliate';
+
 DO $$
 BEGIN
   CREATE TYPE priority_level AS ENUM ('low', 'medium', 'high');
@@ -55,14 +57,21 @@ CREATE TABLE IF NOT EXISTS team_members (
   role team_role NOT NULL DEFAULT 'member',
   display_name TEXT NOT NULL DEFAULT '',
   avatar_url TEXT,
+  fixed_affiliate_amount NUMERIC(12, 2) DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(org_id, user_id)
 );
 
+ALTER TABLE team_members ADD COLUMN IF NOT EXISTS fixed_affiliate_amount NUMERIC(12, 2) DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS prospects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   assigned_to UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  affiliate_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  affiliate_fixed_amount NUMERIC(12, 2) DEFAULT 0,
+  affiliate_payout_status TEXT DEFAULT 'not_applicable',
   business_name TEXT NOT NULL,
   platform platform_type NOT NULL DEFAULT 'other',
   profile_link TEXT DEFAULT '',
@@ -83,6 +92,10 @@ CREATE TABLE IF NOT EXISTS prospects (
 );
 
 ALTER TABLE prospects ADD COLUMN IF NOT EXISTS address TEXT DEFAULT '';
+ALTER TABLE prospects ADD COLUMN IF NOT EXISTS created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+ALTER TABLE prospects ADD COLUMN IF NOT EXISTS affiliate_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+ALTER TABLE prospects ADD COLUMN IF NOT EXISTS affiliate_fixed_amount NUMERIC(12, 2) DEFAULT 0;
+ALTER TABLE prospects ADD COLUMN IF NOT EXISTS affiliate_payout_status TEXT DEFAULT 'not_applicable';
 
 CREATE TABLE IF NOT EXISTS activity_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

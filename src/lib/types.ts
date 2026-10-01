@@ -7,7 +7,7 @@
 export type Platform = 'instagram' | 'facebook' | 'google_maps' | 'other';
 export type ProspectStatus = 'new' | 'contacted' | 'follow_up' | 'interested' | 'proposal_sent' | 'won' | 'lost';
 export type ActivityType = 'call' | 'note' | 'status_change' | 'ai_summary';
-export type TeamRole = 'owner' | 'admin' | 'member';
+export type TeamRole = 'owner' | 'admin' | 'member' | 'affiliate';
 export type PriorityLevel = 'low' | 'medium' | 'high';
 export type LeadTemperature = 'hot' | 'warm' | 'cold' | 'frozen';
 
@@ -27,13 +27,18 @@ export interface TeamMember {
   role: TeamRole;
   display_name: string;
   avatar_url: string | null;
+  fixed_affiliate_amount?: number;
   created_at: string;
 }
 
 export interface Prospect {
   id: string;
   org_id: string;
+  created_by?: string | null;
   assigned_to: string | null;
+  affiliate_user_id?: string | null;
+  affiliate_fixed_amount?: number;
+  affiliate_payout_status?: string;
 
   // Business info
   business_name: string;

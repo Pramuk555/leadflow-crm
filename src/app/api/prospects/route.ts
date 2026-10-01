@@ -6,11 +6,19 @@ export async function GET(request: NextRequest) {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { data: member } = await supabase.from('team_members').select('org_id').eq('user_id', user.id).single();
+  const { data: member } = await supabase
+    .from('team_members')
+    .select('org_id, role')
+    .eq('user_id', user.id)
+    .single();
   if (!member) return NextResponse.json({ error: 'No organization' }, { status: 403 });
 
   const searchParams = request.nextUrl.searchParams;
   let query = supabase.from('prospects').select('*').eq('org_id', member.org_id).order('position');
+
+  if (member.role === 'affiliate') {
+    query = query.eq('affiliate_user_id', user.id);
+  }
 
   const status = searchParams.get('status');
   if (status) query = query.eq('status', status);
@@ -31,7 +39,11 @@ export async function POST(request: NextRequest) {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { data: member } = await supabase.from('team_members').select('org_id').eq('user_id', user.id).single();
+  const { data: member } = await supabase
+    .from('team_members')
+    .select('org_id, role, fixed_affiliate_amount')
+    .eq('user_id', user.id)
+    .single();
   if (!member) return NextResponse.json({ error: 'No organization' }, { status: 403 });
 
   const body = await request.json();
@@ -43,6 +55,11 @@ export async function POST(request: NextRequest) {
   const { data, error } = await supabase.from('prospects').insert({
     ...body,
     org_id: member.org_id,
+    created_by: user.id,
+    affiliate_user_id: member.role === 'affiliate' ? user.id : body.affiliate_user_id || null,
+    affiliate_fixed_amount: member.role === 'affiliate' ? Number(member.fixed_affiliate_amount) || 0 : Number(body.affiliate_fixed_amount) || 0,
+    affiliate_payout_status: member.role === 'affiliate' ? 'pending_conversion' : body.affiliate_user_id ? 'pending_conversion' : 'not_applicable',
+    assigned_to: member.role === 'affiliate' ? null : body.assigned_to || null,
     status: 'new',
     position: nextPosition,
   }).select().single();

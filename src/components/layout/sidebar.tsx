@@ -13,9 +13,10 @@ interface SidebarProps {
     name: string;
     email: string;
   };
+  role?: string;
 }
 
-export function Sidebar({ user }: SidebarProps) {
+export function Sidebar({ user, role }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -35,7 +36,7 @@ export function Sidebar({ user }: SidebarProps) {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Stats', href: '/stats', icon: BarChart3 },
     { name: 'Settings', href: '/settings', icon: Settings },
-  ];
+  ].filter((link) => role !== 'affiliate' || link.href === '/dashboard');
 
   return (
     <>

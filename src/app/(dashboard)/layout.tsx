@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   // Fetch team_member record
   const { data: teamMember } = await supabase
     .from('team_members')
-    .select('display_name, org_id')
+    .select('display_name, org_id, role')
     .eq('user_id', user.id)
     .single();
 
@@ -28,7 +28,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-dvh bg-[#050810] text-slate-100">
-      <Sidebar user={{ name: teamMember.display_name || 'Team Member', email: user.email || '' }} />
+      <Sidebar user={{ name: teamMember.display_name || 'Team Member', email: user.email || '' }} role={teamMember.role} />
       <main className="min-h-dvh min-w-0 flex-1 overflow-y-auto pb-24 md:pb-0">
         {children}
       </main>

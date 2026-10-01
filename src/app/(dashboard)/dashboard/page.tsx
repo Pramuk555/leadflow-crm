@@ -17,11 +17,17 @@ export default async function DashboardPage() {
   if (!member) return null; // Layout handles setup
 
   // Fetch prospects
-  const { data: prospects } = await supabase
+  let prospectsQuery = supabase
     .from('prospects')
     .select('*')
     .eq('org_id', member.org_id)
     .order('position', { ascending: true });
+
+  if (member.role === 'affiliate') {
+    prospectsQuery = prospectsQuery.eq('affiliate_user_id', user.id);
+  }
+
+  const { data: prospects } = await prospectsQuery;
 
   const prospectList = prospects || [];
 

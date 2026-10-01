@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Key, Users, User, Shield, Check, Eye, EyeOff, Loader2, UserPlus, Trash2 } from 'lucide-react';
+import { Key, Users, Shield, Check, Eye, EyeOff, Loader2, UserPlus, BadgeIndianRupee } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SettingsPage() {
@@ -14,11 +14,11 @@ export default function SettingsPage() {
 
   // Team state
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState<'admin' | 'member'>('member');
+  const [inviteRole, setInviteRole] = useState<'admin' | 'member' | 'affiliate'>('member');
   const [inviteName, setInviteName] = useState('');
+  const [invitePassword, setInvitePassword] = useState('');
+  const [fixedAffiliateAmount, setFixedAffiliateAmount] = useState('');
   const [inviting, setInviting] = useState(false);
-  const [teamMembers, setTeamMembers] = useState<any[]>([]);
-  const [loadingTeam, setLoadingTeam] = useState(false);
 
   useEffect(() => {
     fetchSettings();
@@ -58,7 +58,7 @@ export default function SettingsPage() {
 
   const handleInviteMember = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inviteEmail) return;
+    if (!inviteEmail || !invitePassword) return;
 
     setInviting(true);
     try {
@@ -69,16 +69,20 @@ export default function SettingsPage() {
           email: inviteEmail,
           role: inviteRole,
           display_name: inviteName || inviteEmail.split('@')[0],
+          password: invitePassword,
+          fixed_affiliate_amount: fixedAffiliateAmount ? Number(fixedAffiliateAmount) : 0,
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to send invite');
+      if (!res.ok) throw new Error(data.error || 'Failed to create login');
 
-      toast.success(`Invite sent to ${inviteEmail}!`);
+      toast.success(`Login created for ${inviteEmail}`);
       setInviteEmail('');
       setInviteName('');
-    } catch (err: any) {
-      toast.error(err.message);
+      setInvitePassword('');
+      setFixedAffiliateAmount('');
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to create login');
     } finally {
       setInviting(false);
     }
@@ -173,15 +177,15 @@ export default function SettingsPage() {
       {/* Team Management Tab */}
       {activeTab === 'team' && (
         <div className="space-y-6 max-w-2xl">
-          {/* Invite Form */}
+          {/* Login / Affiliate Form */}
           <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-xl sm:p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                 <UserPlus className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-slate-100">Invite Team Member</h2>
-                <p className="text-xs text-slate-400">Send an invitation email to collaborate on leads.</p>
+                <h2 className="text-base font-bold text-slate-100">Create Team Login</h2>
+                <p className="text-xs text-slate-400">Create staff or affiliate credentials without Supabase email invites.</p>
               </div>
             </div>
 
@@ -193,7 +197,7 @@ export default function SettingsPage() {
                     type="email"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder="teammate@agency.com"
+                    placeholder="person@gmail.com"
                     required
                     className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
                   />
@@ -211,16 +215,52 @@ export default function SettingsPage() {
               </div>
 
               <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Dedicated Password</label>
+                <input
+                  type="text"
+                  value={invitePassword}
+                  onChange={(e) => setInvitePassword(e.target.value)}
+                  placeholder="Minimum 8 characters"
+                  required
+                  minLength={8}
+                  className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">Role</label>
                 <select
                   value={inviteRole}
-                  onChange={(e) => setInviteRole(e.target.value as any)}
+                  onChange={(e) => setInviteRole(e.target.value as 'admin' | 'member' | 'affiliate')}
                   className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-700 rounded-xl text-xs text-slate-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
                 >
                   <option value="member" className="bg-slate-900">Member (Full lead tracking access)</option>
                   <option value="admin" className="bg-slate-900">Admin (Manage team & settings)</option>
+                  <option value="affiliate" className="bg-slate-900">Affiliate (Add prospect details only)</option>
                 </select>
               </div>
+
+              {inviteRole === 'affiliate' && (
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">Fixed Affiliate Amount</label>
+                  <div className="relative">
+                    <BadgeIndianRupee className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={fixedAffiliateAmount}
+                      onChange={(e) => setFixedAffiliateAmount(e.target.value)}
+                      placeholder="e.g. 1000"
+                      required
+                      className="w-full pl-9 pr-3.5 py-2 bg-slate-950/60 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+                    />
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-slate-500">
+                    This amount becomes owed when one of this affiliate's leads is marked won.
+                  </p>
+                </div>
+              )}
 
               <button
                 type="submit"
@@ -228,7 +268,7 @@ export default function SettingsPage() {
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-emerald-500 disabled:opacity-50 sm:w-auto"
               >
                 {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
-                Send Invitation
+                Create Login
               </button>
             </form>
           </div>
