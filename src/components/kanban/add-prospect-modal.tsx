@@ -46,7 +46,6 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
     try {
       const payload = {
         ...formData,
-        orgId,
         expected_revenue: formData.expected_revenue ? parseFloat(formData.expected_revenue) : 0,
         assigned_to: formData.assigned_to || null,
       };
@@ -57,14 +56,15 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error('Failed to create lead');
-      
       const result = await res.json();
+
+      if (!res.ok) throw new Error(result.error || 'Failed to create lead');
+      
       toast.success('Lead created successfully');
       onSuccess(result.data);
       onClose();
     } catch (error) {
-      toast.error('Failed to create lead');
+      toast.error(error instanceof Error ? error.message : 'Failed to create lead');
     } finally {
       setLoading(false);
     }
