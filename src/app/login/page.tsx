@@ -46,6 +46,10 @@ function friendlyAuthError(message: string) {
     return 'This email already has an account. Sign in instead.';
   }
 
+  if (lower.includes('rate limit') || lower.includes('429')) {
+    return 'Too many signup attempts. Try again in a few minutes.';
+  }
+
   return message || 'Authentication failed. Please try again.';
 }
 
@@ -107,24 +111,26 @@ export default function LoginPage() {
         return;
       }
 
-      const { data, error } = await supabase.auth.signUp({
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Could not create the account.');
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
         email: cleanEmail,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
-        },
       });
 
       if (error) throw error;
-
-      if (data.session) {
-        router.replace('/dashboard');
-        router.refresh();
-      } else {
-        setSuccess('Account created. Check your email to confirm it, then sign in.');
-        setMode('login');
-        setPassword('');
-      }
+      document.cookie = 'leadflow_demo=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      router.replace('/dashboard');
+      router.refresh();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : '';
       setError(friendlyAuthError(message));
