@@ -202,9 +202,9 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
   const activeProspect = activeId ? prospects.find(p => p.id === activeId) || null : null;
 
   return (
-    <div className="flex flex-col h-full space-y-4">
-      <div className="flex flex-wrap items-center gap-4 p-4 bg-slate-900 border border-slate-800 rounded-lg">
-        <div className="relative flex-1 min-w-[200px]">
+    <div className="flex min-h-dvh flex-col space-y-3 p-3 sm:space-y-4 sm:p-4">
+      <div className="flex flex-col gap-3 rounded-lg border border-slate-800 bg-slate-900 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:p-4">
+        <div className="relative w-full sm:min-w-[220px] sm:flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input 
             type="text" 
@@ -215,12 +215,12 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
           />
         </div>
         
-        <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-400" />
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
+            <Filter className="hidden w-4 h-4 text-slate-400 sm:block" />
             <select 
                 value={platformFilter} 
                 onChange={(e) => setPlatformFilter(e.target.value as Platform | 'All')}
-                className="bg-slate-950 border border-slate-800 rounded-md text-sm text-slate-300 py-2 px-3"
+                className="min-w-0 bg-slate-950 border border-slate-800 rounded-md text-sm text-slate-300 py-2 px-3"
             >
                 <option value="All">All Platforms</option>
                 {Object.entries(PLATFORM_CONFIG).map(([key, config]) => (
@@ -231,7 +231,7 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
             <select 
                 value={priorityFilter} 
                 onChange={(e) => setPriorityFilter(e.target.value as PriorityLevel | 'All')}
-                className="bg-slate-950 border border-slate-800 rounded-md text-sm text-slate-300 py-2 px-3"
+                className="min-w-0 bg-slate-950 border border-slate-800 rounded-md text-sm text-slate-300 py-2 px-3"
             >
                 <option value="All">All Priorities</option>
                 {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
@@ -239,7 +239,7 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
                 ))}
             </select>
             
-            <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+            <label className="col-span-2 flex items-center gap-2 text-sm text-slate-300 cursor-pointer sm:col-span-1">
                 <input 
                     type="checkbox" 
                     checked={overdueOnly} 
@@ -252,7 +252,7 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
 
         <button 
           onClick={() => setIsAddModalOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors ml-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 sm:ml-auto sm:w-auto sm:py-2"
         >
           <Plus className="w-4 h-4" />
           Add Lead
@@ -267,8 +267,8 @@ export function KanbanBoard({ initialProspects, followUps, team, orgId, userId }
         onDragEnd={onDragEnd}
         onDragCancel={onDragCancel}
       >
-        <div className="flex-1 overflow-x-auto">
-          <div className="flex items-start gap-4 pb-4 min-w-max h-full">
+        <div className="-mx-3 flex-1 overflow-x-auto px-3 scrollbar-thin sm:mx-0 sm:px-0">
+          <div className="flex h-full min-w-max snap-x snap-mandatory items-start gap-3 pb-4 sm:gap-4">
             {STATUS_ORDER.map(status => {
               const columnProspects = prospectsByStatus[status] || [];
               const totalRevenue = columnProspects.reduce((sum, p) => sum + (Number(p.expected_revenue) || 0), 0);

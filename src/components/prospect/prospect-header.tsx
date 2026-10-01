@@ -94,16 +94,16 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
   };
 
   return (
-    <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-xl mb-6">
+    <div className="mb-4 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-xl backdrop-blur-xl sm:mb-6 sm:p-6">
       {/* Back button & top meta */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/dashboard"
           className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Kanban Board
         </Link>
-        <div className="flex items-center gap-3 text-xs text-slate-400">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 sm:gap-3">
           <span>Created {formatDateTime(prospect.created_at)}</span>
           <span>•</span>
           <span className="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700">
@@ -113,39 +113,39 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
       </div>
 
       {/* Main header body */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-800">
-        <div className="space-y-2">
+      <div className="flex flex-col justify-between gap-5 border-b border-slate-800 pb-5 lg:flex-row lg:items-center lg:gap-6 lg:pb-6">
+        <div className="min-w-0 space-y-2">
           {isEditing ? (
             <div className="space-y-3">
               <input
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                className="text-2xl font-bold bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-white w-full max-w-md focus:outline-none focus:border-blue-500"
+                className="w-full max-w-md rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xl font-bold text-white focus:border-blue-500 focus:outline-none sm:py-1.5 sm:text-2xl"
                 placeholder="Business Name"
               />
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   type="text"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="text-xs bg-slate-800 border border-slate-700 rounded-lg px-3 py-1 text-slate-200 focus:outline-none"
+                  className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-200 focus:outline-none sm:py-1"
                   placeholder="Category (e.g. Café)"
                 />
                 <input
                   type="url"
                   value={profileLink}
                   onChange={(e) => setProfileLink(e.target.value)}
-                  className="text-xs bg-slate-800 border border-slate-700 rounded-lg px-3 py-1 text-slate-200 flex-1 focus:outline-none"
+                  className="flex-1 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-200 focus:outline-none sm:py-1"
                   placeholder="Profile URL"
                 />
               </div>
             </div>
           ) : (
-            <div className="flex items-start gap-3">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight">
+            <div className="flex min-w-0 items-start gap-3">
+              <div className="min-w-0">
+                <div className="flex items-start gap-3">
+                  <h1 className="min-w-0 break-words text-2xl font-extrabold tracking-tight text-slate-100 sm:text-3xl">
                     {prospect.business_name}
                   </h1>
                   <button
@@ -156,7 +156,7 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
                     <Edit2 className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="flex items-center gap-2 mt-2">
+                <div className="mt-2 flex flex-wrap items-center gap-2">
                   <span className={cn('px-2.5 py-0.5 rounded-full text-xs font-semibold', platformConfig.bgColor, platformConfig.color)}>
                     {platformConfig.icon} {platformConfig.label}
                   </span>
@@ -175,25 +175,25 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
         </div>
 
         {/* Action Controls & External Link */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:w-auto">
           {prospect.profile_link && (
             <a
               href={prospect.profile_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 rounded-xl font-medium text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/5"
+              className="flex items-center justify-center gap-2 rounded-xl border border-blue-500/30 bg-blue-600/20 px-4 py-2.5 text-sm font-medium text-blue-400 shadow-lg shadow-blue-500/5 transition-all hover:bg-blue-600/30 sm:justify-start"
             >
               Open Profile <ExternalLink className="w-4 h-4" />
             </a>
           )}
 
           {/* Status Dropdown */}
-          <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-xl p-1">
+          <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 p-1">
             <span className="text-xs text-slate-400 pl-2">Status:</span>
             <select
               value={prospect.status}
               onChange={(e) => handleStatusChange(e.target.value as ProspectStatus)}
-              className="bg-transparent text-sm font-semibold text-slate-100 py-1 pr-2 focus:outline-none cursor-pointer"
+              className="min-w-0 flex-1 cursor-pointer bg-transparent py-1 pr-2 text-sm font-semibold text-slate-100 focus:outline-none"
             >
               {Object.entries(STATUS_CONFIG).map(([key, config]) => (
                 <option key={key} value={key} className="bg-slate-900 text-slate-200">
@@ -204,12 +204,12 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
           </div>
 
           {/* Assignee Dropdown */}
-          <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-xl p-1">
+          <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 p-1">
             <span className="text-xs text-slate-400 pl-2">Owner:</span>
             <select
               value={prospect.assigned_to || ''}
               onChange={(e) => handleAssigneeChange(e.target.value || null)}
-              className="bg-transparent text-sm text-slate-100 py-1 pr-2 focus:outline-none cursor-pointer"
+              className="min-w-0 flex-1 cursor-pointer bg-transparent py-1 pr-2 text-sm text-slate-100 focus:outline-none"
             >
               <option value="" className="bg-slate-900 text-slate-400">Unassigned</option>
               {team.map((m) => (
@@ -266,24 +266,24 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
                 placeholder="25000"
               />
             </div>
-            <div className="md:col-span-4 flex justify-end gap-2 mt-2">
+            <div className="mt-2 flex flex-col-reverse gap-2 md:col-span-4 md:flex-row md:justify-end">
               <button
                 onClick={() => setIsEditing(false)}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 md:py-1.5"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveDetails}
                 disabled={saving}
-                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium flex items-center gap-1"
+                className="flex items-center justify-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-xs font-medium text-white hover:bg-blue-500 md:py-1.5"
               >
                 <Check className="w-3.5 h-3.5" /> Save Changes
               </button>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+          <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2 md:grid-cols-4 md:gap-4">
             <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
               <User className="w-4 h-4 text-blue-400 shrink-0" />
               <div>

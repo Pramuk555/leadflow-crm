@@ -26,7 +26,7 @@ export function KanbanColumn({ id, title, icon, color, bgColor, borderColor, pro
   const prospectIds = prospects.map(p => p.id);
 
   return (
-    <div className="flex flex-col w-[280px] min-w-[280px] h-full shrink-0 bg-slate-900/50 rounded-xl overflow-hidden border border-slate-800">
+    <div className="flex h-full w-[86vw] min-w-[86vw] shrink-0 snap-start flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50 sm:w-[280px] sm:min-w-[280px]">
       <div className={cn("h-1 w-full", bgColor)} />
       
       <div className="p-3 flex items-center justify-between border-b border-slate-800/50 bg-slate-900/80">
@@ -47,7 +47,7 @@ export function KanbanColumn({ id, title, icon, color, bgColor, borderColor, pro
       <div 
         ref={setNodeRef} 
         className={cn(
-            "flex-1 p-3 overflow-y-auto max-h-[calc(100vh-220px)] scrollbar-thin transition-colors duration-200",
+            "flex-1 p-3 overflow-y-auto max-h-[calc(100dvh-260px)] sm:max-h-[calc(100vh-220px)] scrollbar-thin transition-colors duration-200",
             isOver ? "bg-slate-800/30" : ""
         )}
       >

@@ -10,12 +10,12 @@ interface HeaderProps {
 
 export function Header({ title, onAddProspect }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between px-6 glass border-b border-slate-800">
-      <div className="flex items-center">
-        <h1 className="text-xl font-semibold text-slate-100">{title}</h1>
+    <header className="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-3 px-4 sm:px-6 glass border-b border-slate-800">
+      <div className="flex min-w-0 items-center">
+        <h1 className="truncate text-lg font-semibold text-slate-100 sm:text-xl">{title}</h1>
       </div>
       
-      <div className="flex items-center space-x-4">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-4">
         <div className="relative hidden md:block">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
           <input
@@ -28,10 +28,10 @@ export function Header({ title, onAddProspect }: HeaderProps) {
         {onAddProspect && (
           <button
             onClick={onAddProspect}
-            className="flex items-center space-x-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors shadow-sm"
+            className="flex items-center gap-1 bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 sm:py-1.5 rounded-md text-sm font-medium transition-colors shadow-sm"
           >
             <Plus className="h-4 w-4" />
-            <span>Add Prospect</span>
+            <span className="hidden sm:inline">Add Prospect</span>
           </button>
         )}
       </div>

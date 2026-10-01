@@ -86,16 +86,16 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-8 animate-fade-in">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-100">Settings & Team Configuration</h1>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-xl font-bold text-slate-100 sm:text-2xl">Settings & Team Configuration</h1>
         <p className="text-sm text-slate-400">Manage API keys, team access, and organization preferences.</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 mb-8 gap-4">
+      <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto border-b border-slate-800 px-4 scrollbar-thin md:mx-0 md:mb-8 md:gap-4 md:px-0">
         <button
           onClick={() => setActiveTab('api')}
-          className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`shrink-0 pb-3 px-3 sm:px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
             activeTab === 'api'
               ? 'border-blue-500 text-blue-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -105,7 +105,7 @@ export default function SettingsPage() {
         </button>
         <button
           onClick={() => setActiveTab('team')}
-          className={`pb-3 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`shrink-0 pb-3 px-3 sm:px-4 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
             activeTab === 'team'
               ? 'border-blue-500 text-blue-400'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -117,7 +117,7 @@ export default function SettingsPage() {
 
       {/* API Key Settings Tab */}
       {activeTab === 'api' && (
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-xl max-w-2xl">
+        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-xl max-w-2xl sm:p-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20">
               <Key className="w-5 h-5 text-blue-400" />
@@ -161,7 +161,7 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={savingKey}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-500 disabled:opacity-50 sm:w-auto"
             >
               {savingKey ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
               Save API Key
@@ -174,7 +174,7 @@ export default function SettingsPage() {
       {activeTab === 'team' && (
         <div className="space-y-6 max-w-2xl">
           {/* Invite Form */}
-          <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-xl sm:p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                 <UserPlus className="w-5 h-5 text-emerald-400" />
@@ -225,7 +225,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={inviting}
-                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-emerald-500 disabled:opacity-50 sm:w-auto"
               >
                 {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
                 Send Invitation

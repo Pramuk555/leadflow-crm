@@ -134,16 +134,16 @@ export function QuickActions({
   return (
     <div className="space-y-6">
       {/* Quick Action Box */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 shadow-xl">
+      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-xl sm:p-5">
         <h3 className="text-sm font-bold text-slate-200 mb-4 flex items-center gap-2">
           <span>⚡</span> Quick Actions
         </h3>
 
         {/* Tab Buttons */}
-        <div className="flex border-b border-slate-800 mb-4">
+        <div className="-mx-4 mb-4 flex overflow-x-auto border-b border-slate-800 px-4 scrollbar-thin sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveTab('call')}
-            className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            className={`shrink-0 pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
               activeTab === 'call'
                 ? 'border-emerald-500 text-emerald-400'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -153,7 +153,7 @@ export function QuickActions({
           </button>
           <button
             onClick={() => setActiveTab('note')}
-            className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            className={`shrink-0 pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
               activeTab === 'note'
                 ? 'border-blue-500 text-blue-400'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -163,7 +163,7 @@ export function QuickActions({
           </button>
           <button
             onClick={() => setActiveTab('followup')}
-            className={`pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
+            className={`shrink-0 pb-2.5 px-3 text-xs font-semibold flex items-center gap-1.5 border-b-2 transition-colors ${
               activeTab === 'followup'
                 ? 'border-amber-500 text-amber-400'
                 : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -251,7 +251,7 @@ export function QuickActions({
       </div>
 
       {/* Pending Follow-ups */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 shadow-xl">
+      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-xl sm:p-5">
         <h3 className="text-sm font-bold text-slate-200 mb-3 flex items-center justify-between">
           <span className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-amber-400" /> Scheduled Follow-ups

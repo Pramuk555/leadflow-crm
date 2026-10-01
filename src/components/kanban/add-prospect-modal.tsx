@@ -70,13 +70,13 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
       
-      <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-slate-800 bg-slate-900 p-4 shadow-2xl sm:max-h-[90vh] sm:rounded-2xl sm:p-6">
         <button 
           onClick={onClose}
           className="absolute right-4 top-4 text-slate-400 hover:text-white transition-colors"
@@ -84,7 +84,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
           <X className="w-5 h-5" />
         </button>
 
-        <h2 className="text-xl font-bold text-white mb-6">Add New Lead</h2>
+        <h2 className="mb-5 pr-8 text-lg font-bold text-white sm:mb-6 sm:text-xl">Add New Lead</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -99,7 +99,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Platform</label>
               <select
@@ -138,7 +138,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">Category</label>
                 <input 
@@ -205,7 +205,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
                       className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className="block text-sm font-medium text-slate-300 mb-1">Phone</label>
                         <input 
@@ -228,7 +228,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
               </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex flex-col-reverse gap-3 pt-4 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
@@ -239,7 +239,7 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed sm:py-2"
             >
               {loading ? 'Creating...' : 'Create Lead'}
             </button>

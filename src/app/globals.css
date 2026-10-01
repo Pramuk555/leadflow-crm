@@ -29,6 +29,12 @@ body {
   color: #f1f5f9;
 }
 
+html,
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
 /* Selection */
 ::selection {
   background: rgba(59, 130, 246, 0.3);
