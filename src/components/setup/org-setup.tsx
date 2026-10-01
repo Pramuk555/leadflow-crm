@@ -22,17 +22,18 @@ export function OrgSetup() {
       const res = await fetch('/api/setup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orgName, displayName }),
+        body: JSON.stringify({ org_name: orgName.trim(), display_name: displayName.trim() }),
       });
 
       if (!res.ok) {
-        throw new Error('Failed to create organization');
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(body?.error || 'Failed to create organization');
       }
 
       toast.success('Organization created successfully');
       router.refresh();
-    } catch (error: any) {
-      toast.error(error.message || 'Something went wrong');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -42,7 +43,7 @@ export function OrgSetup() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="glass-card w-full max-w-md p-8 rounded-xl shadow-2xl">
         <h2 className="text-2xl font-semibold text-slate-100 mb-2">Welcome to LeadFlow</h2>
-        <p className="text-sm text-slate-400 mb-6">Let's set up your organization to get started.</p>
+        <p className="text-sm text-slate-400 mb-6">Let us set up your organization to get started.</p>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

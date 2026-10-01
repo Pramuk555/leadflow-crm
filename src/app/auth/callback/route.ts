@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
+import { getSupabaseBrowserConfig } from '@/lib/supabase/config';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -12,9 +13,10 @@ export async function GET(request: Request) {
   if (!code) return NextResponse.redirect(`${origin}/login?error=Could+not+authenticate`);
 
   const response = NextResponse.redirect(`${origin}${next}`);
+  const { url, anonKey } = getSupabaseBrowserConfig();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         getAll() {
