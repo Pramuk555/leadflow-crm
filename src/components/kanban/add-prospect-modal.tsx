@@ -23,14 +23,15 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     business_name: '',
-    platform: 'Instagram' as Platform,
+    platform: 'instagram' as Platform,
     profile_link: '',
+    address: '',
     category: '',
     contact_name: '',
     contact_phone: '',
     contact_email: '',
     assigned_to: '',
-    priority: 'Medium' as PriorityLevel,
+    priority: 'medium' as PriorityLevel,
     expected_revenue: '',
   });
 
@@ -58,9 +59,9 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
 
       if (!res.ok) throw new Error('Failed to create lead');
       
-      const newProspect = await res.json();
+      const result = await res.json();
       toast.success('Lead created successfully');
-      onSuccess(newProspect);
+      onSuccess(result.data);
       onClose();
     } catch (error) {
       toast.error('Failed to create lead');
@@ -135,6 +136,17 @@ export function AddProspectModal({ isOpen, onClose, orgId, team, onSuccess }: Ad
               onChange={e => setFormData({...formData, profile_link: e.target.value})}
               className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="https://..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-1">Address</label>
+            <textarea
+              value={formData.address}
+              onChange={e => setFormData({...formData, address: e.target.value})}
+              rows={2}
+              className="w-full resize-none bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Street, area, city"
             />
           </div>
 

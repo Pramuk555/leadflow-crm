@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Prospect, TeamMember, ProspectStatus, PriorityLevel, Platform } from '@/lib/types';
 import { STATUS_CONFIG, PLATFORM_CONFIG, PRIORITY_CONFIG } from '@/lib/constants';
 import { cn, formatDateTime, calculateTemperature, calculateDaysInStage, formatCurrency } from '@/lib/utils';
-import { ExternalLink, ArrowLeft, Building2, User, Phone, Mail, DollarSign, Calendar, Edit2, Check, X } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Building2, User, Phone, Mail, DollarSign, Calendar, Edit2, Check, X, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -18,6 +18,7 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
   const [isEditing, setIsEditing] = useState(false);
   const [businessName, setBusinessName] = useState(prospect.business_name);
   const [category, setCategory] = useState(prospect.category || '');
+  const [address, setAddress] = useState(prospect.address || '');
   const [contactName, setContactName] = useState(prospect.contact_name || '');
   const [contactPhone, setContactPhone] = useState(prospect.contact_phone || '');
   const [contactEmail, setContactEmail] = useState(prospect.contact_email || '');
@@ -68,6 +69,7 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
       const payload = {
         business_name: businessName,
         category,
+        address,
         contact_name: contactName,
         contact_phone: contactPhone,
         contact_email: contactEmail,
@@ -138,6 +140,16 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
                   onChange={(e) => setProfileLink(e.target.value)}
                   className="flex-1 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-200 focus:outline-none sm:py-1"
                   placeholder="Profile URL"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">Address</label>
+                <textarea
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  rows={2}
+                  className="w-full resize-none rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:outline-none"
+                  placeholder="Street, area, city"
                 />
               </div>
             </div>
@@ -284,6 +296,13 @@ export function ProspectHeader({ prospect, team, onUpdate }: ProspectHeaderProps
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2 md:grid-cols-4 md:gap-4">
+            <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3 md:col-span-2">
+              <MapPin className="w-4 h-4 text-cyan-400 shrink-0" />
+              <div className="min-w-0">
+                <span className="text-slate-400 block">Address</span>
+                <span className="font-semibold text-slate-200 break-words">{prospect.address || 'Not set'}</span>
+              </div>
+            </div>
             <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
               <User className="w-4 h-4 text-blue-400 shrink-0" />
               <div>

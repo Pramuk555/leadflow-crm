@@ -39,6 +39,7 @@ export interface Prospect {
   business_name: string;
   platform: Platform;
   profile_link: string;
+  address?: string;
   category: string;
 
   // Contact person
@@ -103,6 +104,7 @@ export interface CreateProspectInput {
   business_name: string;
   platform: Platform;
   profile_link?: string;
+  address?: string;
   category?: string;
   contact_name?: string;
   contact_phone?: string;
@@ -116,6 +118,7 @@ export interface UpdateProspectInput {
   business_name?: string;
   platform?: Platform;
   profile_link?: string;
+  address?: string;
   category?: string;
   contact_name?: string;
   contact_phone?: string;

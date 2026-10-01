@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS prospects (
   business_name TEXT NOT NULL,
   platform platform_type NOT NULL DEFAULT 'other',
   profile_link TEXT DEFAULT '',
+  address TEXT DEFAULT '',
   category TEXT DEFAULT '',
   contact_name TEXT DEFAULT '',
   contact_phone TEXT DEFAULT '',
@@ -80,6 +81,8 @@ CREATE TABLE IF NOT EXISTS prospects (
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
+
+ALTER TABLE prospects ADD COLUMN IF NOT EXISTS address TEXT DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS activity_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
